@@ -148,7 +148,7 @@ def train_multi_task(param_file):
                         rep, mask = model['rep'](images, mask)
                         out_t, masks[t] = model[t](rep, None)
                         loss = loss_fn[t](out_t, labels[t])
-                        loss_data[t] = loss.data.item()
+                        loss_data[t] = loss.data.item()QSQ
                         loss.backward()
                         grads[t] = []
                         for param in model['rep'].parameters():
@@ -176,7 +176,7 @@ def train_multi_task(param_file):
             for i, t in enumerate(tasks):
                 out_t, _ = model[t](rep, masks[t])
                 loss_t = loss_fn[t](out_t, labels[t])
-                loss_data[t] = loss_t.data[0]
+                loss_data[t] = loss_t.data.item()
                 if i > 0:
                     loss = loss + scale[t]*loss_t
                 else:
@@ -216,8 +216,8 @@ def train_multi_task(param_file):
             for t in tasks:
                 out_t_val, _ = model[t](val_rep, None)
                 loss_t = loss_fn[t](out_t_val, labels_val[t])
-                tot_loss['all'] += loss_t.data[0]
-                tot_loss[t] += loss_t.data[0]
+                tot_loss['all'] += loss_t.data.item()
+                tot_loss[t] += loss_t.data.item()
                 metric[t].update(out_t_val, labels_val[t])
             num_val_batches+=1
 
